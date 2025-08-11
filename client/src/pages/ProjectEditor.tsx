@@ -170,8 +170,10 @@ export default function ProjectEditor() {
         const replSlug = currentHost.split('.')[0];
         return `https://${project.slug}--${replSlug}.replit.app`;
       } else if (currentHost.includes('.vercel.app')) {
-        // Vercel deployment URL - subdomain format: slug.lovedev.vercel.app
-        return `https://${project.slug}.lovedev.vercel.app`;
+        // Vercel deployment URL - subdomain format
+        const parts = currentHost.split('.');
+        const appName = parts.slice(1).join('.');
+        return `https://${project.slug}.${appName}`;
       } else if (currentHost.includes('localhost') || currentHost.includes('replit.dev')) {
         // Development URL - use /site/:slug route
         const baseUrl = `${currentProtocol}//${currentHost}${currentPort ? ':' + currentPort : ''}`;

@@ -4,8 +4,8 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
-// Trust proxy for Replit and Vercel environments
-app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
+// Trust proxy for Replit environment
+app.set('trust proxy', true);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -39,7 +39,7 @@ app.use((req, res, next) => {
   next();
 });
 
-(async () => {
+async function initializeApp() {
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -59,6 +59,13 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
+  return { app, server };
+}
+
+// Regular server mode for development and other deployments
+(async () => {
+  const { server } = await initializeApp();
+  
   // ALWAYS serve the app on the port specified in the environment variable PORT
   // Other ports are firewalled. Default to 5000 if not specified.
   // this serves both the API and the client.
@@ -82,3 +89,14 @@ app.use((req, res, next) => {
     }
   });
 })();
+
+// Export for Vercel Functions
+let cachedApp: any = null;
+
+export default async function handler(req: any, res: any) {
+  if (!cachedApp) {
+    const { app: initializedApp } = await initializeApp();
+    cachedApp = initializedApp;
+  }
+  return cachedApp(req, res);
+}
