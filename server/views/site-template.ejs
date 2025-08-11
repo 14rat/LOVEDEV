@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title><%= mainTitle || 'Site Romântico' %></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<%= description || 'Um site romântico personalizado' %>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mozilla+Text:wght@200..700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    <main id="template-box" class="bg-stone-950 min-h-dvh flex flex-col items-center space-y-4 p-8 relative overflow-hidden">
+        <section id="template-content" class="max-w-sm w-full flex flex-col gap-8 text-center md:max-w-lg">
+            <div id="template-header" class="flex flex-col gap-4 w-full md:max-w-lg">
+                <h1 id="template-title" class="text-3xl font-bold text-transparent bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-center">
+                    <%= mainTitle || 'Título do Site' %>
+                </h1>
+                <h2 id="template-description" class="text-lg text-zinc-500 font-semibold">
+                    <%= subtitle || 'Subtítulo' %>
+                </h2>
+            </div>
+            <% if (imageUrl) { %>
+            <div id="template-image" class="w-full bg-white/10 h-52 rounded-lg flex items-center justify-center overflow-hidden">
+                <img src="<%= imageUrl %>" alt="<%= mainTitle %>" class="w-full h-full object-cover rounded-lg">
+            </div>
+            <% } else { %>
+            <div id="template-image" class="w-full bg-white/10 h-52 rounded-lg flex items-center justify-center">
+                <p class="text-lg text-zinc-300">💕 Sua foto aqui 💕</p>
+            </div>
+            <% } %>
+            <div class="p-0.5 rounded-lg bg-gradient-to-r from-red-600 to-rose-600 w-full">
+                <div class="bg-stone-950 rounded-lg py-4 px-6 text-center">
+                    <span id="template-counter" class="text-lg text-zinc-300"><%= description || 'Sua mensagem romântica aqui' %></span>
+                </div>
+            </div>
+        </section>
+        <div class="footer mt-8 text-center">
+            <p class="text-sm text-zinc-600">Criado com 💝 | <a href="https://<%= baseDomain %>" class="text-red-400 hover:text-red-300 transition-colors">Crie o seu site romântico</a></p>
+        </div>
+    </main>
+    <style type="text/tailwindcss">
+        @theme {
+            --default-font-family: "Mozilla Text";
+        }
+    </style>
+    <style>
+        @keyframes fall {
+            from {
+                top: -10%;
+                opacity: 1;
+            }
+            to {
+                top: 110%;
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes sway {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(var(--sway-amount));
+            }
+        }
+    </style>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('template-box')
+            const rainEmoji = '<%= rainEmoji || "❤️" %>'
+            
+            function createEmojiRain() {
+                const emoji = document.createElement('span')
+                
+                emoji.innerHTML = rainEmoji
+                emoji.classList.add('absolute', 'pointer-events-none')
+
+                const size = Math.random() * 1.5 + 0.45
+                const duration = Math.random() * 5 + 2
+                const startX = Math.random() * 100
+                const swayAmount = Math.random() * 60 - 30
+
+                emoji.style.left = `${startX}vw`
+                emoji.style.fontSize = `${size}rem`
+
+                emoji.style.animation = `fall ${duration}s linear forwards, sway ${duration/2}s ease-in-out infinite alternate`
+                
+                emoji.style.setProperty('--sway-amount', `${swayAmount}px`)
+
+                emoji.addEventListener('animationend', (e) => {
+                    if (e.animationName === 'fall') {
+                        emoji.remove()
+                    }
+                })
+
+                container.appendChild(emoji)
+            }
+
+            setInterval(createEmojiRain, 350)
+        })
+    </script>
+</body>
+</html>

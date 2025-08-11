@@ -1,0 +1,8 @@
+[run]
+run = "npm run dev"
+
+[deployment]
+run = ["sh", "-c", "npm run build && NODE_ENV=production npm start"]
+
+[unitTest]
+language = "nodejs"

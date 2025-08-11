@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Preview - Seu site ficará assim</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="O seu site ficará assim. Confira todos os detalhes antes de realizar o pagamento">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mozilla+Text:wght@200..700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    <main id="template-box" class="bg-stone-950 min-h-dvh flex flex-col items-center space-y-4 p-8 relative overflow-hidden">
+        <section id="template-content" class="max-w-sm w-full flex flex-col gap-8 text-center md:max-w-lg">
+            <div id="template-header" class="flex flex-col gap-4 w-full md:max-w-lg">
+                <h1 id="template-title" class="text-3xl font-bold text-transparent bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-center">
+                    {{TITLE}}
+                </h1>
+                <h2 id="template-description" class="text-lg text-zinc-500 font-semibold">
+                    {{DESCRIPTION}}
+                </h2>
+            </div>
+            <div id="template-image" class="w-full bg-white/10 h-52 rounded-lg flex items-center justify-center">
+                <p class="text-lg text-zinc-300">{{IMAGE}}</p>
+            </div>
+            <div class="p-0.5 rounded-lg bg-gradient-to-r from-red-600 to-rose-600 w-full">
+                <div class="bg-stone-950 rounded-lg py-2 text-center">
+                    <span id="template-counter" class="text-lg text-zinc-300">{{TIMER}}</span>
+                </div>
+            </div>
+        </section>
+    </main>
+    <style type="text/tailwindcss">
+        @theme {
+            --default-font-family: "Mozilla Text";
+        }
+    </style>
+    <style>
+        @keyframes fall {
+            from {
+                top: -10%;
+                opacity: 1;
+            }
+            to {
+                top: 110%;
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes sway {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(var(--sway-amount));
+            }
+        }
+    </style>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('template-box')
+            function createHeart() {
+                const heart = document.createElement('span')
+                
+                heart.innerHTML = '❤️'
+                heart.classList.add('absolute', 'pointer-events-none')
+
+                const size = Math.random() * 1.5 + 0.45
+                const duration = Math.random() * 5 + 2
+                const startX = Math.random() * 100
+                const swayAmount = Math.random() * 60 - 30
+
+                heart.style.left = `${startX}vw`
+                heart.style.fontSize = `${size}rem`
+
+                heart.style.animation = `fall ${duration}s linear forwards, sway ${duration/2}s ease-in-out infinite alternate`
+                
+                heart.style.setProperty('--sway-amount', `${swayAmount}px`)
+
+                heart.addEventListener('animationend', (e) => {
+                    if (e.animationName === 'fall') {
+                        heart.remove()
+                    }
+                })
+
+                container.appendChild(heart)
+            }
+
+            setInterval(createHeart, 350)
+        })
+    </script>
+</body>
+</html>
