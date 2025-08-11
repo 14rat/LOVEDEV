@@ -24,11 +24,11 @@ export const detectSubdomain = (req: SubdomainRequest, res: Response, next: Next
         console.log(`🏠 System domain detected: ${hostname}`);
       }
     } else if (hostname.includes('.vercel.app') || hostname.includes('localhost')) {
-      // Vercel URLs like: meu-site-romntico.your-app.vercel.app or localhost
-      if (hostname !== 'localhost' && hostname !== 'localhost:5000' && !hostname.match(/^[a-f0-9-]{8,}.*\.vercel\.app$/)) {
-        // Extract subdomain from Vercel format: subdomain.main-app.vercel.app
+      // Vercel URLs like: meu-site-romntico.lovedev.vercel.app or localhost
+      if (hostname !== 'localhost' && hostname !== 'localhost:5000' && !hostname.match(/^lovedev\.vercel\.app$/)) {
+        // Extract subdomain from Vercel format: subdomain.lovedev.vercel.app
         const parts = hostname.split('.');
-        if (parts.length >= 3 && parts[parts.length-2] !== 'vercel') {
+        if (parts.length >= 3 && parts[0] !== 'lovedev') {
           subdomain = parts[0];
           console.log(`🎯 Extracted subdomain from Vercel URL: ${subdomain}`);
         } else {
@@ -61,7 +61,7 @@ export const detectSubdomain = (req: SubdomainRequest, res: Response, next: Next
                           hostname === 'localhost:5000' || 
                           hostname === 'localhost' ||
                           (hostname.includes('replit.dev') && !hostname.match(/^([^-]+(?:-[^-]+)*)--/)) ||
-                          (hostname.includes('.vercel.app') && hostname.match(/^[a-f0-9-]{8,}.*\.vercel\.app$/));
+                          (hostname.includes('.vercel.app') && hostname.match(/^lovedev\.vercel\.app$/));
     
     if (isSystemDomain) {
       req.isSystemSubdomain = true;

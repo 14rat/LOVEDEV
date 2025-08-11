@@ -4,8 +4,8 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
-// Trust proxy for Replit environment
-app.set('trust proxy', true);
+// Trust proxy for Replit and Vercel environments
+app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
