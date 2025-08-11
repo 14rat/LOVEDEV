@@ -22,10 +22,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.set('view engine', 'ejs');
   app.set('views', path.join(import.meta.dirname, 'views'));
 
-  // Ensure uploads directory exists
+  // Ensure uploads directory exists (skip in serverless environments)
   const uploadsDir = path.join(import.meta.dirname, 'uploads');
-  if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
+  try {
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+  } catch (error) {
+    console.warn('Could not create uploads directory (serverless environment):', error);
   }
 
   // Serve static files from uploads directory
